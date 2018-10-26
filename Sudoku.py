@@ -1,28 +1,26 @@
-def read_sudoku_in_line(txtPath, sudokuNumber):
-    #open sudoku txt file
-    file = open(txtPath, "r")
+class Sudoku:
 
-    #Read all lines of this file
-    sudokuList = file.readlines()
+    def __init__(self):
+        self.sudokuList = []
+        self.sudokuToSolve = []
 
-    #Get the disired sudoku
-    sudokuInLine    = sudokuList[sudokuNumber]
-    sudokuToSolve   = []
-    i = 0
-    while(i < len(sudokuInLine)):
-        sudokuTmp = []
-        sudokuTmp.append(sudokuInLine[i:i+9])
-        sudokuToSolve.append(sudokuTmp)
-        i = i + 9
+    def read_sudoku_in_line(self, txtPath, sudokuNumber):
+        #open sudoku txt file
+        file = open(txtPath, "r")
 
-    #delete the last element
-    del sudokuToSolve[len(sudokuToSolve) - 1]
-    print(sudokuToSolve)
-    file.close()
-    return sudokuToSolve
+        #Read all lines of this file
+        self.sudokuList = file.readlines()
 
-def is_line_valide(sudoku):
-    response = False
+        #Get the disired sudoku
+        sudokuInLine    = self.sudokuList[sudokuNumber]
+        i = 0
+        while(i < len(sudokuInLine)):
+            sudokuTmp = []
+            sudokuTmp.append(sudokuInLine[i:i+9])
+            self.sudokuToSolve.append(sudokuTmp)
+            i = i + 9
 
-
-List = read_sudoku_in_line("0.txt",0)
+        #delete the last element
+        del self.sudokuToSolve[len(self.sudokuToSolve) - 1]
+        file.close()
+        return self.sudokuToSolve
