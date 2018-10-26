@@ -30,7 +30,7 @@ class Sudoku:
         file.close()
         return self.sudokuToSolve
 
-    def init_Possible_Value_Box(self,positionI,positionJ):#Position I(ligne) compris entre 0 et 8 # Position J(colonne) compris entre 0 et 8
+    def init_Possible_Value_Line(self,positionI,positionJ):#Position I(ligne) compris entre 0 et 8 # Position J(colonne) compris entre 0 et 8
         if self.sudokuToSolve[positionI][positionJ].possibleValues.length()==1:
             return
         for j in range (0,9):
@@ -39,7 +39,23 @@ class Sudoku:
                     if self.sudokuToSolve[positionI][j].values in self.sudokuToSolve[positionI][positionJ].possibleValues :
                         self.sudokuToSolve[positionI][positionJ].possibleValues.remove(self.sudokuToSolve[positionI][j].values)
 
+    def init_Possible_Value_Column(self,positionI,positionJ):#Position I(ligne) compris entre 0 et 8 # Position J(colonne) compris entre 0 et 8
+        if self.sudokuToSolve[positionI][positionJ].possibleValues.length()==1:
+            return
+        for i in range (0,9):
+            if i!=positionI :
+                if  self.sudokuToSolve[i][positionJ].possibleValues.length()==1:
+                    if self.sudokuToSolve[i][positionJ].values in self.sudokuToSolve[positionI][positionJ].possibleValues :
+                        self.sudokuToSolve[positionI][positionJ].possibleValues.remove(self.sudokuToSolve[i][positionJj].values)
+
+    def init_Possible_Value_Column(self,positionI,positionJ):
+        if self.sudokuToSolve[positionI][positionJ].possibleValues.length()==1:
+            return
+        numberCaseLine=positionI%3
+        numberCaseColumn=positionJ%3
+    
     def printSudoku(self):
         for i in self.sudokuToSolve:
             for j in i:
-                print(j.value)
+                print(j.value,end='|')
+            print('')
