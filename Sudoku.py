@@ -7,7 +7,6 @@ class Sudoku:
 
 
     def read_sudoku_in_line(self, txtPath, sudokuNumber):
-
         #open sudoku txt file
         file = open(txtPath, "r")
         #Read all lines of this file
@@ -39,3 +38,8 @@ class Sudoku:
                 if  self.sudokuToSolve[positionI][j].possibleValues.length()==1:
                     if self.sudokuToSolve[positionI][j].values in self.sudokuToSolve[positionI][positionJ].possibleValues :
                         self.sudokuToSolve[positionI][positionJ].possibleValues.remove(self.sudokuToSolve[positionI][j].values)
+
+    def printSudoku(self):
+        for i in self.sudokuToSolve:
+            for j in i:
+                print(j.value)
