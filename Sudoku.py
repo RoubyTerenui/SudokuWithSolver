@@ -18,7 +18,7 @@ class Sudoku:
         while(i < len(sudokuInLine)-1):
             sudokuTmp = []
             for j in range(0,9):
-                if (sudokuInLine[i+j])!="":
+                if (sudokuInLine[i+j]) != "":
                     box = Box(((int)(sudokuInLine[i+j])))
                     #box.val
                     sudokuTmp.append(box)
@@ -30,32 +30,45 @@ class Sudoku:
         file.close()
         return self.sudokuToSolve
 
-    def init_Possible_Value_Line(self,positionI,positionJ):#Position I(ligne) compris entre 0 et 8 # Position J(colonne) compris entre 0 et 8
-        if self.sudokuToSolve[positionI][positionJ].possibleValues.length()==1:
+    def init_Possible_Value_Line(self, posX, posY):#Position I(ligne) compris entre 0 et 8 # Position J(Column) compris entre 0 et 8
+        if( len(self.sudokuToSolve[posX][posY].possibleValues) == 1 ):
             return
-        for j in range (0,9):
-            if j!=positionJ :
-                if  self.sudokuToSolve[positionI][j].possibleValues.length()==1:
-                    if self.sudokuToSolve[positionI][j].values in self.sudokuToSolve[positionI][positionJ].possibleValues :
-                        self.sudokuToSolve[positionI][positionJ].possibleValues.remove(self.sudokuToSolve[positionI][j].values)
+        for j in range (0, 9):
+            if( j !=posY ):
+                if( len(self.sudokuToSolve[posX][j].possibleValues) == 1):
+                    if( self.sudokuToSolve[posX][j].value in self.sudokuToSolve[posX][posY].possibleValues ):
+                        self.sudokuToSolve[posX][posY].possibleValues.remove(self.sudokuToSolve[posX][j].value)
 
-    def init_Possible_Value_Column(self,positionI,positionJ):#Position I(ligne) compris entre 0 et 8 # Position J(colonne) compris entre 0 et 8
-        if self.sudokuToSolve[positionI][positionJ].possibleValues.length()==1:
+    def init_Possible_Value_Column(self, posX, posY):#Position I(ligne) compris entre 0 et 8 # Position J(colonne) compris entre 0 et 8
+        if (len(self.sudokuToSolve[posX][posY].possibleValues) == 1):
             return
-        for i in range (0,9):
-            if i!=positionI :
-                if  self.sudokuToSolve[i][positionJ].possibleValues.length()==1:
-                    if self.sudokuToSolve[i][positionJ].values in self.sudokuToSolve[positionI][positionJ].possibleValues :
-                        self.sudokuToSolve[positionI][positionJ].possibleValues.remove(self.sudokuToSolve[i][positionJj].values)
+        for i in range(0, 9):
+            if i!=posX :
+                if(len(self.sudokuToSolve[i][posY].possibleValues) == 1):
+                    if self.sudokuToSolve[i][posY].value in self.sudokuToSolve[posX][posY].possibleValues :
+                        self.sudokuToSolve[posX][posY].possibleValues.remove(self.sudokuToSolve[i][posY].value)
 
-    def init_Possible_Value_Column(self,positionI,positionJ):
-        if self.sudokuToSolve[positionI][positionJ].possibleValues.length()==1:
+    def init_Possible_Value_Case(self,posX,posY):
+        if(len(self.sudokuToSolve[posX][posY].possibleValues) == 1):
             return
-        numberCaseLine=positionI%3
-        numberCaseColumn=positionJ%3
-    
+        numberCaseLine   = posX%3
+        numberCaseColumn = posY%3
+        for i in range(numberCaseLine, numberCaseLine+3):
+            for j in range(numberCaseColumn, numberCaseColumn+3):
+                if i != posX :
+                    if(len(self.sudokuToSolve[i][j].possibleValues) == 1):
+                        if self.sudokuToSolve[i][j].value in self.sudokuToSolve[posX][posY].possibleValues :
+                            self.sudokuToSolve[posX][posY].possibleValues.remove(self.sudokuToSolve[i][j].value)
+
+    def init_Constraint(self):
+        for i in range(0,9):
+            for j in range(0,9):
+                self.init_Possible_Value_Line(i, j)
+                self.init_Possible_Value_Column(i, j)
+                self.init_Possible_Value_Case(i,j)
+
     def printSudoku(self):
         for i in self.sudokuToSolve:
             for j in i:
-                print(j.value,end='|')
+                print(j.value, end='|')
             print('')
