@@ -79,90 +79,84 @@ class Sudoku:
 
 
     #Contraintes
-    def test_Assignement_Complete(self,assignment):
+    def test_Assignement_Complete(self, assignment):
         res = False;
-        if len(assignment)==len(self.sudokuToSolve):
-            res=True
-            for i in range(0,len(assignment)):
-                if len(assignment[0])!=len(self.sudokuToSolve[0]):
-                    res=False
+        if(len(assignment) == len(self.sudokuToSolve)):
+            res = True
+            for i in range(0, len(assignment)):
+                if(len(assignment[0]) != len(self.sudokuToSolve[0])):
+                    res = False
         return res
-
-
-
-
 
     #Heuristiques
-
-    def countRemainingValue(self,posX,posY):#compte le nombre de valeurs restantes pour X
+    def countRemainingValue(self, posX, posY):#compte le nombre de valeurs restantes pour X
         return len(self.sudokuToSolve[posX][posY].possibleValues);
 
-    def countDegreeHeur(self,posX,posY):#compte le nombre de case contrainte par l'assignement de X
-        res=0
-        numberCaseLine = posX % 3
-        numberCaseColumn = posY % 3
-        for i in range(numberCaseLine, numberCaseLine+3):
-            for j in range(numberCaseColumn, numberCaseColumn+3):
-                if(i != posX) or (j != posY):
-                    if( len( self.sudokuToSolve[i][j].possibleValues) != 1 ):
-                        res+=1
-        for i in range(0, 9):
-            if i!=posX :
-                if(len(self.sudokuToSolve[i][posY].possibleValues) != 1):
-                    res+=1
-        for j in range(0, 9):
-            if(j != posY):
-                if( len(self.sudokuToSolve[posX][j].possibleValues) == 1):
-                    res+=1
-        return res
-    def countConstraintCreated(self,posX,posY,value):#Compte combien de contraintes vont être crée si l'on assigne une valeur value à X
-        res = 0
-        numberCaseLine = posX % 3
+    def countDegreeHeur(self, posX, posY):#compte le nombre de case contrainte par l'assignement de X
+        res              = 0
+        numberCaseLine   = posX % 3
         numberCaseColumn = posY % 3
         for i in range(numberCaseLine, numberCaseLine + 3):
             for j in range(numberCaseColumn, numberCaseColumn + 3):
-                if (i != posX) or (j != posY):
+                if(i != posX) or (j != posY):
+                    if(len(self.sudokuToSolve[i][j].possibleValues) != 1):
+                        res = res + 1
+        for i in range(0, 9):
+            if(i != posX):
+                if(len(self.sudokuToSolve[i][posY].possibleValues) != 1):
+                    res = res + 1
+        for j in range(0, 9):
+            if(j != posY):
+                if(len(self.sudokuToSolve[posX][j].possibleValues) == 1):
+                    res = res + 1
+        return res
+
+    def countConstraintCreated(self, posX, posY, value):#Compte combien de contraintes vont être crée si l'on assigne une valeur value à X
+        res              = 0
+        numberCaseLine   = posX % 3
+        numberCaseColumn = posY % 3
+        for i in range(numberCaseLine, numberCaseLine + 3):
+            for j in range(numberCaseColumn, numberCaseColumn + 3):
+                if(i != posX) or(j != posY):
                     if (len(self.sudokuToSolve[i][j].possibleValues) != 1):
-                        res += len(self.sudokuToSolve[i][j].possibleValues)
+                        res = res + len(self.sudokuToSolve[i][j].possibleValues)
                         if (value in self.sudokuToSolve[i][j].possibleValues):
-                            res-=1
+                            res = res - 1
                     else:
                         if (value in self.sudokuToSolve[i][j].possibleValues):
                             return 0
         for i in range(0, 9):
-            if i != posX:
-                if (len(self.sudokuToSolve[i][posY].possibleValues) != 1):
-                    res += len(self.sudokuToSolve[i][j].possibleValues)
+            if(i != posX):
+                if(len(self.sudokuToSolve[i][posY].possibleValues) != 1):
+                    res = res + len(self.sudokuToSolve[i][j].possibleValues)
                     if (value in self.sudokuToSolve[i][posY].possibleValues):
-                        res -= 1
+                        res = res - 1
                 else:
                     if (value in self.sudokuToSolve[i][j].possibleValues):
                         return 0
         for j in range(0, 9):
-            if (j != posY):
-                if (len(self.sudokuToSolve[posX][j].possibleValues) == 1):
-                    res += len(self.sudokuToSolve[i][j].possibleValues)
+            if(j != posY):
+                if(len(self.sudokuToSolve[posX][j].possibleValues) == 1):
+                    res = res + len(self.sudokuToSolve[i][j].possibleValues)
                     if (value in self.sudokuToSolve[posX][j].possibleValues):
-                        res -= 1
+                        res = res - 1
                 else:
-                    if (value in self.sudokuToSolve[i][j].possibleValues):
+                    if(value in self.sudokuToSolve[i][j].possibleValues):
                         return 0
         return res
 
     def OrderDomainValues(self,posX,posY):# Ordonne les contraintes selon les contraintes qu'elles imposent aux autres
-        for i in range(0,len(self.sudokuToSolve[posX][posY].possibleValues)):
-            min=i
-            for j in range(i,len(self.sudokuToSolve[posX][posY].possibleValues)):
-                x= self.countConstraintCreated(self,posX,posY,self.sudokuToSolve[posX][posY].possibleValues[j])
-                y= self.countConstraintCreated(self,posX,posY,self.sudokuToSolve[posX][posY].possibleValues[i])
-                if x<y:
-                    min=j
-            if min != i :
+        for i in range(0, len(self.sudokuToSolve[posX][posY].possibleValues)):
+            min = i
+            for j in range(i, len(self.sudokuToSolve[posX][posY].possibleValues)):
+                x = self.countConstraintCreated(self,posX,posY,self.sudokuToSolve[posX][posY].possibleValues[j])
+                y = self.countConstraintCreated(self,posX,posY,self.sudokuToSolve[posX][posY].possibleValues[i])
+                if(x<y):
+                    min = j
+            if(min != i):
                 temp=self.sudokuToSolve[posX][posY].possibleValues[min]
                 self.sudokuToSolve[posX][posY].possibleValues[min]=self.sudokuToSolve[posX][posY].possibleValues[i]
                 self.sudokuToSolve[posX][posY].possibleValues[i]=temp
-
-
 
     #Backtracking Search
         #def recursive_Backtracking_Search(self,assignement):
@@ -182,20 +176,16 @@ class Sudoku:
         #def backtracking_Search(self):
          #   return recursive_Backtracking_Search(self,[])
 
-
-
-
-
 #AC-3
-    def remove_Inconsistent_Values(self, box1,box2):
-        removed=False
+    def remove_Inconsistent_Values(self, box1, box2):
+        removed = False
         for x in box1.possibleValues:
-            value=False
+            value = False
             for y in box2.possibleValues :
-                if x!=y:
-                    value=True
-            if value!=True:
-                removed=True
+                if(x != y):
+                    value = True
+            if(value != True):
+                removed = True
                 box1.possibleValues.remove(x)
         return removed
 
