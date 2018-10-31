@@ -203,8 +203,37 @@ class Sudoku:
                     return False
         return True
 
-    def get_Best_Choice(self, possibleValues):
+    def get_Best_Choice(self):
+        heuristiqueList = []
+        h = 1
+        for i in range(0, 9):
+            for j in range(0, 9):
+                if(self.sudokuToSolve[i][j].value == 0):
+                    heuristiqueList.append(self.countRemainingValue(i, j))
+        self.sortHeuristique(heuristiqueList)
+        tmp = heuristiqueList[0][0]
+        while(heuristiqueList[h][0] == tmp):
+            h = h + 1
+        heuristiqueList2 = heuristiqueList[0:h]
+        if(h > 1):
+            for i in range(0, len(heuristiqueList2)):
+                heuristiqueList2[i][0] = self.countDegreeHeur(heuristiqueList2[i][1],heuristiqueList2[i][2])
+            self.sortHeuristique(heuristiqueList2)
+            return heuristiqueList2[len(heuristiqueList2) - 1]
+        return heuristiqueList2[0]
 
+    def sortHeuristique(self, list):
+        for i in range(0, len(list)):
+            min = i
+            for j in range(i, len(list)):
+                x = list[j][0]
+                y = list[i][0]
+                if(x<y):
+                    min = j
+            if(min != i):
+                temp = list[min][0]
+                list[min][0] = list[i][0]
+                list[i][0] = temp
 
 #AC-3
     def remove_Inconsistent_Values(self, box1, box2):
@@ -220,9 +249,9 @@ class Sudoku:
         return removed
 
     def aC3(self):
-        queue=[]
-        for i in range(0,9):
-            for j in range(0,9):
+        queue = []
+        for i in range(0, 9):
+            for j in range(0, 9):
                 if self.sudokuToSolve[i][j].value==0:
                     for k in range(0, 9):
                         if i != k:
@@ -239,10 +268,7 @@ class Sudoku:
                             if i!=k or j!=h :
                                  if self.sudokuToSolve[k][h].value==0:
                                       queue.append([i,j,k,h])
-        while len(queue)!=0:
-            [posX1,posY1,posX2,posY2]=queue.pop(0)
-            if self.remove_Inconsistent_Values(self.sudokuToSolve[posX1][posY1],self.sudokuToSolve[posX2][posY2]):
+        while(len(queue) != 0):
+            [posX1,posY1,posX2,posY2] = queue.pop(0)
+            if self.remove_Inconsistent_Values(self.sudokuToSolve[posX1][posY1], self.sudokuToSolve[posX2][posY2]):
                 #neighbors
-
-
-
