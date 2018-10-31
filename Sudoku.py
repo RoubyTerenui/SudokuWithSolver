@@ -101,20 +101,20 @@ class Sudoku:
         #compte le nombre de case contrainte par l'assignement de X
     def countDegreeHeur(self, posX, posY):
         res              = 0
-        numberCaseLine   = posX % 3
-        numberCaseColumn = posY % 3
+        numberCaseLine   = (posX // 3)*3
+        numberCaseColumn = (posY // 3)*3
         for i in range(numberCaseLine, numberCaseLine + 3):
             for j in range(numberCaseColumn, numberCaseColumn + 3):
                 if(i != posX) or (j != posY):
-                    if(len(self.sudokuToSolve[i][j].possibleValues) != 1):
+                    if(self.sudokuToSolve[i][j].value != 0):
                         res = res + 1
-        for i in range(0, 9):
-            if(i != posX):
-                if(len(self.sudokuToSolve[i][posY].possibleValues) != 1):
+        for k in range(0, 9):
+            if(k != posX):
+                if(self.sudokuToSolve[k][posY].value != 0):
                     res = res + 1
-        for j in range(0, 9):
-            if(j != posY):
-                if(len(self.sudokuToSolve[posX][j].possibleValues) == 1):
+        for h in range(0, 9):
+            if(h != posY):
+                if(self.sudokuToSolve[posX][h].value != 0):
                     res = res + 1
         return res
 
@@ -198,8 +198,8 @@ class Sudoku:
          #   return recursive_Backtracking_Search(self,[])
 
     def isConsistant(self,posX,posY,value):
-        numberCaseLine = posX % 3
-        numberCaseColumn = posY % 3
+        numberCaseLine = (posX // 3)*3
+        numberCaseColumn = (posY // 3)*3
         for i in range(numberCaseLine, numberCaseLine + 3):
             for j in range(numberCaseColumn, numberCaseColumn + 3):
                 if (i != posX) or (j != posY):
@@ -273,8 +273,8 @@ class Sudoku:
                         if j != h:
                             if self.sudokuToSolve[i][h].value == 0:
                                 queue.append([i, j, i, h])
-                    numberCaseLine = i % 3
-                    numberCaseColumn = j % 3
+                    numberCaseLine = (i // 3)*3
+                    numberCaseColumn = (j // 3)*3
                     for i in range(numberCaseLine, numberCaseLine + 3):
                         for j in range(numberCaseColumn, numberCaseColumn + 3):
                             if i!=k or j!=h :
