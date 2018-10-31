@@ -268,7 +268,7 @@ class Sudoku:
                             if i!=k or j!=h :
                                  if self.sudokuToSolve[k][h].value==0:
                                       queue.append([i,j,k,h])
-        while(len(queue) != 0):
-            [posX1,posY1,posX2,posY2] = queue.pop(0)
-            if self.remove_Inconsistent_Values(self.sudokuToSolve[posX1][posY1], self.sudokuToSolve[posX2][posY2]):
+        #while len(queue)!=0:
+         #   [posX1,posY1,posX2,posY2]=queue.pop(0)
+          #  if self.remove_Inconsistent_Values(self.sudokuToSolve[posX1][posY1],self.sudokuToSolve[posX2][posY2]):
                 #neighbors
