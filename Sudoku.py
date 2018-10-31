@@ -66,8 +66,8 @@ class Sudoku:
     def init_Possible_Value_Case(self, posX, posY):
         if(len(self.sudokuToSolve[posX][posY].possibleValues) == 1):
             return
-        numberCaseLine   = posX%3
-        numberCaseColumn = posY%3
+        numberCaseLine   = (posX // 3)*3
+        numberCaseColumn = (posY // 3)*3
         for i in range(numberCaseLine, numberCaseLine + 3):
             for j in range(numberCaseColumn, numberCaseColumn + 3):
                 if(i != posX) or (j != posY):
@@ -119,41 +119,53 @@ class Sudoku:
         return res
 
         #Compte combien de contraintes vont être crée si l'on assigne une valeur value à X
-    def countConstraintCreated(self, posX, posY, value):
+    def count_Constraint_Created(self, posX, posY, value):
         res              = 0
-        numberCaseLine   = posX % 3
-        numberCaseColumn = posY % 3
-        for i in range(numberCaseLine, numberCaseLine + 3):
-            for j in range(numberCaseColumn, numberCaseColumn + 3):
-                if(i != posX) or(j != posY):
-                    if(len(self.sudokuToSolve[i][j].possibleValues) != 1):
-                        res = res + len(self.sudokuToSolve[i][j].possibleValues)
-                        if(value in self.sudokuToSolve[i][j].possibleValues):
-                            res = res - 1
-                    else:
-                        if(value in self.sudokuToSolve[i][j].possibleValues):
-                            return 0
+        numberCaseLine   = (posX // 3)*3
+        numberCaseColumn = (posY // 3)*3
         for i in range(0, 9):
             if(i != posX):
-                if(len(self.sudokuToSolve[i][posY].possibleValues) != 1):
-                    res = res + len(self.sudokuToSolve[i][j].possibleValues)
+                if(self.sudokuToSolve[i][posY].value == 0):
+                    res = res + len(self.sudokuToSolve[i][posY].possibleValues)
                     if(value in self.sudokuToSolve[i][posY].possibleValues):
+                        print('hihi')
                         res = res - 1
+                    print(i, end=' i ')
+                    print(posX, end=' posX ')
+                    print(res)
                 else:
-                    if(value in self.sudokuToSolve[i][j].possibleValues):
+                    if(value in self.sudokuToSolve[i][posY].possibleValues):
                         return 0
         for j in range(0, 9):
             if(j != posY):
-                if(len(self.sudokuToSolve[posX][j].possibleValues) == 1):
-                    res = res + len(self.sudokuToSolve[i][j].possibleValues)
+                if(self.sudokuToSolve[posX][j].value == 0):
+                    res = res + len(self.sudokuToSolve[posX][j].possibleValues)
                     if(value in self.sudokuToSolve[posX][j].possibleValues):
+                        print('hihi')
                         res = res - 1
+                    print(j, end=' j ')
+                    print(posY, end=' posY ')
+                    print(res)
                 else:
-                    if(value in self.sudokuToSolve[i][j].possibleValues):
+                    if(value in self.sudokuToSolve[posX][j].possibleValues):
                         return 0
+        for i in range(numberCaseLine, numberCaseLine + 3):
+            for j in range(numberCaseColumn, numberCaseColumn + 3):
+                if(i != posX) or(j != posY):
+                    if(self.sudokuToSolve[i][j].value == 0):
+                        res = res + len(self.sudokuToSolve[i][j].possibleValues)
+                        if(value in self.sudokuToSolve[i][j].possibleValues):
+                            print('hihi')
+                            res = res - 1
+                        print(i, end=' i ')
+                        print(j, end=' j ')
+                        print(res)
+                    else:
+                        if(value in self.sudokuToSolve[i][j].possibleValues):
+                            return 0
         return res
 
-    def OrderDomainValues(self, posX, posY):
+    def order_Domain_Values(self, posX, posY):
         # Ordonne les contraintes selon les contraintes qu'elles imposent aux autres
         for i in range(0, len(self.sudokuToSolve[posX][posY].possibleValues)):
             min = i
@@ -222,7 +234,7 @@ class Sudoku:
             return heuristiqueList2[len(heuristiqueList2) - 1]
         return heuristiqueList2[0]
 
-    def sortHeuristique(self, list):
+    def sort_Heuristique(self, list):
         for i in range(0, len(list)):
             min = i
             for j in range(i, len(list)):
