@@ -84,12 +84,11 @@ class Sudoku:
                 self.init_Possible_Value_Case(i, j)
 
     #Contraintes
-    def test_Assignement_Complete(self, assignment):
-        res = False;
-        if(len(assignment) == len(self.sudokuToSolve)):
-            res = True
-            for i in range(0, len(assignment)):
-                if(len(assignment[0]) != len(self.sudokuToSolve[0])):
+    def test_Assignement_Complete(self):
+        res = True;
+        for i in range(0, 9):
+            for j in range(0, 9):
+                if (self.sudokuToSolve[i][j].value == 0) :
                     res = False
         return res
 
@@ -195,11 +194,11 @@ class Sudoku:
                         return False
         for i in range(0, 9):
             if (i != posX):
-                if (value == self.sudokuToSolve[i][posY]):
+                if (value == self.sudokuToSolve[i][posY].value):
                     return False
         for j in range(0, 9):
             if (j != posY):
-                if (value == self.sudokuToSolve[posX][j]):
+                if (value == self.sudokuToSolve[posX][j].value):
                     return False
         return True
 
