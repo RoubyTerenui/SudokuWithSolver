@@ -185,6 +185,24 @@ class Sudoku:
         #def backtracking_Search(self):
          #   return recursive_Backtracking_Search(self,[])
 
+    def isConsistant(self,posX,posY,value):
+        numberCaseLine = posX % 3
+        numberCaseColumn = posY % 3
+        for i in range(numberCaseLine, numberCaseLine + 3):
+            for j in range(numberCaseColumn, numberCaseColumn + 3):
+                if (i != posX) or (j != posY):
+                    if (value == self.sudokuToSolve[i][j].value):
+                        return False
+        for i in range(0, 9):
+            if (i != posX):
+                if (value == self.sudokuToSolve[i][posY]):
+                    return False
+        for j in range(0, 9):
+            if (j != posY):
+                if (value == self.sudokuToSolve[posX][j]):
+                    return False
+        return True
+
     def get_Best_Choice(self, possibleValues):
 
 
@@ -203,3 +221,28 @@ class Sudoku:
 
     def aC3(self):
         queue=[]
+        for i in range(0,9):
+            for j in range(0,9):
+                if self.sudokuToSolve[i][j].value==0:
+                    for k in range(0, 9):
+                        if i != k:
+                            if self.sudokuToSolve[k][j].value == 0:
+                                queue.append([i, j, k, j])
+                    for h in range(0, 9):
+                        if j != h:
+                            if self.sudokuToSolve[i][h].value == 0:
+                                queue.append([i, j, i, h])
+                    numberCaseLine = i % 3
+                    numberCaseColumn = j % 3
+                    for i in range(numberCaseLine, numberCaseLine + 3):
+                        for j in range(numberCaseColumn, numberCaseColumn + 3):
+                            if i!=k or j!=h :
+                                 if self.sudokuToSolve[k][h].value==0:
+                                      queue.append([i,j,k,h])
+        while len(queue)!=0:
+            [posX1,posY1,posX2,posY2]=queue.pop(0)
+            if self.remove_Inconsistent_Values(self.sudokuToSolve[posX1][posY1],self.sudokuToSolve[posX2][posY2]):
+                #neighbors
+
+
+
