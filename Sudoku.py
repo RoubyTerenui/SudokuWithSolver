@@ -123,16 +123,22 @@ class Sudoku:
         res              = 0
         numberCaseLine   = (posX // 3)*3
         numberCaseColumn = (posY // 3)*3
+        for i in range(numberCaseLine, numberCaseLine + 3):
+            for j in range(numberCaseColumn, numberCaseColumn + 3):
+                if(i != posX) or(j != posY):
+                    if(self.sudokuToSolve[i][j].value == 0):
+                        res = res + len(self.sudokuToSolve[i][j].possibleValues)
+                        if(value in self.sudokuToSolve[i][j].possibleValues):
+                            res = res - 1
+                    else:
+                        if(value in self.sudokuToSolve[i][j].possibleValues):
+                            return 0
         for i in range(0, 9):
             if(i != posX):
                 if(self.sudokuToSolve[i][posY].value == 0):
                     res = res + len(self.sudokuToSolve[i][posY].possibleValues)
                     if(value in self.sudokuToSolve[i][posY].possibleValues):
-                        print('hihi')
                         res = res - 1
-                    print(i, end=' i ')
-                    print(posX, end=' posX ')
-                    print(res)
                 else:
                     if(value in self.sudokuToSolve[i][posY].possibleValues):
                         return 0
@@ -141,28 +147,10 @@ class Sudoku:
                 if(self.sudokuToSolve[posX][j].value == 0):
                     res = res + len(self.sudokuToSolve[posX][j].possibleValues)
                     if(value in self.sudokuToSolve[posX][j].possibleValues):
-                        print('hihi')
                         res = res - 1
-                    print(j, end=' j ')
-                    print(posY, end=' posY ')
-                    print(res)
                 else:
                     if(value in self.sudokuToSolve[posX][j].possibleValues):
                         return 0
-        for i in range(numberCaseLine, numberCaseLine + 3):
-            for j in range(numberCaseColumn, numberCaseColumn + 3):
-                if(i != posX) or(j != posY):
-                    if(self.sudokuToSolve[i][j].value == 0):
-                        res = res + len(self.sudokuToSolve[i][j].possibleValues)
-                        if(value in self.sudokuToSolve[i][j].possibleValues):
-                            print('hihi')
-                            res = res - 1
-                        print(i, end=' i ')
-                        print(j, end=' j ')
-                        print(res)
-                    else:
-                        if(value in self.sudokuToSolve[i][j].possibleValues):
-                            return 0
         return res
 
     def order_Domain_Values(self, posX, posY):
