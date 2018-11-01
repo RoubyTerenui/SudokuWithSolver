@@ -180,11 +180,28 @@ class Sudoku:
                     #remove value from assignement
             #return failure
 
+    def backtracking_Search(self):
+        return recursive_Backtracking_Search(self, [])
 
-        #def backtracking_Search(self):
-         #   return recursive_Backtracking_Search(self,[])
+    def recursive_Backtracking_Search(self):
+        if(self.test_Assignement_Complete()):
+            return True
+        var = self.get_Best_Choice()
+        self.order_Domain_Values(var[1], var[2])
+        for value in self.sudokuToSolve[var[1]][var[2]].possibleValues:
+            if(self.is_Consistant(var[1], var[2], value)):
+                temp = self.sudokuToSolve[var[1]][var[2]].possibleValues
+                self.sudokuToSolve[var[1]][var[2]].value = value
+                self.sudokuToSolve[var[1]][var[2]].possibleValues = [value]
+                result = self.recursive_Backtracking_Search()
+                if(result != False):
+                    return result
+                self.sudokuToSolve[var[1]][var[2]].value = 0
+                self.sudokuToSolve[var[1]][var[2]].possibleValues = temp
+        return False
 
-    def isConsistant(self,posX,posY,value):
+
+    def is_Consistant(self, posX, posY, value):
         numberCaseLine = (posX // 3)*3
         numberCaseColumn = (posY // 3)*3
         for i in range(numberCaseLine, numberCaseLine + 3):
@@ -219,7 +236,7 @@ class Sudoku:
                 heuristiqueList2[i][0] = self.countDegreeHeur(heuristiqueList2[i][1],heuristiqueList2[i][2])
             self.sortHeuristique(heuristiqueList2)
             return heuristiqueList2[len(heuristiqueList2) - 1]
-        return heuristiqueList2[0]
+        return heuristiqueList2
 
     def sort_Heuristique(self, list):
         for i in range(0, len(list)):
