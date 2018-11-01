@@ -157,8 +157,8 @@ class Sudoku:
         for i in range(0, len(self.sudokuToSolve[posX][posY].possibleValues)):
             min = i
             for j in range(i, len(self.sudokuToSolve[posX][posY].possibleValues)):
-                x = self.countConstraintCreated(self,posX,posY,self.sudokuToSolve[posX][posY].possibleValues[j])
-                y = self.countConstraintCreated(self,posX,posY,self.sudokuToSolve[posX][posY].possibleValues[i])
+                x = self.count_Constraint_Created(posX,posY,self.sudokuToSolve[posX][posY].possibleValues[j])
+                y = self.count_Constraint_Created(posX,posY,self.sudokuToSolve[posX][posY].possibleValues[i])
                 if(x<y):
                     min = j
             if(min != i):
@@ -181,7 +181,7 @@ class Sudoku:
             #return failure
 
     def backtracking_Search(self):
-        return recursive_Backtracking_Search(self, [])
+        return self.recursive_Backtracking_Search()
 
     def recursive_Backtracking_Search(self):
         if(self.test_Assignement_Complete()):
@@ -193,6 +193,7 @@ class Sudoku:
                 temp = self.sudokuToSolve[var[1]][var[2]].possibleValues
                 self.sudokuToSolve[var[1]][var[2]].value = value
                 self.sudokuToSolve[var[1]][var[2]].possibleValues = [value]
+                self.aC3()
                 result = self.recursive_Backtracking_Search()
                 if(result != False):
                     return result
@@ -225,18 +226,19 @@ class Sudoku:
         for i in range(0, 9):
             for j in range(0, 9):
                 if(self.sudokuToSolve[i][j].value == 0):
-                    heuristiqueList.append(self.countRemainingValue(i, j))
-        self.sortHeuristique(heuristiqueList)
+                    heuristiqueList.append([self.countRemainingValue(i, j),i,j])
+        self.sort_Heuristique(heuristiqueList)
         tmp = heuristiqueList[0][0]
-        while(heuristiqueList[h][0] == tmp):
-            h = h + 1
+        if(tmp in heuristiqueList[1:len(heuristiqueList)]):
+            while(heuristiqueList[h][0] == tmp):
+                h = h + 1
         heuristiqueList2 = heuristiqueList[0:h]
         if(h > 1):
             for i in range(0, len(heuristiqueList2)):
                 heuristiqueList2[i][0] = self.countDegreeHeur(heuristiqueList2[i][1],heuristiqueList2[i][2])
             self.sortHeuristique(heuristiqueList2)
             return heuristiqueList2[len(heuristiqueList2) - 1]
-        return heuristiqueList2
+        return heuristiqueList2[0]
 
     def sort_Heuristique(self, list):
         for i in range(0, len(list)):
