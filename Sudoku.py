@@ -181,7 +181,7 @@ class Sudoku:
             #return failure
 
     def backtracking_Search(self):
-        return recursive_Backtracking_Search(self, [])
+        return recursive_Backtracking_Search([])
 
     def recursive_Backtracking_Search(self):
         if(self.test_Assignement_Complete()):
