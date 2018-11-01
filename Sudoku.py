@@ -279,12 +279,25 @@ class Sudoku:
                                 queue.append([i, j, i, h])
                     numberCaseLine = (i // 3)*3
                     numberCaseColumn = (j // 3)*3
-                    for i in range(numberCaseLine, numberCaseLine + 3):
-                        for j in range(numberCaseColumn, numberCaseColumn + 3):
+                    for k in range(numberCaseLine, numberCaseLine + 3):
+                        for h in range(numberCaseColumn, numberCaseColumn + 3):
                             if i!=k or j!=h :
                                  if self.sudokuToSolve[k][h].value==0:
                                       queue.append([i,j,k,h])
-        #while len(queue)!=0:
-         #   [posX1,posY1,posX2,posY2]=queue.pop(0)
-          #  if self.remove_Inconsistent_Values(self.sudokuToSolve[posX1][posY1],self.sudokuToSolve[posX2][posY2]):
+        while len(queue)!=0:
+            [posX1,posY1,posX2,posY2]=queue.pop(0)
+            if self.remove_Inconsistent_Values(self.sudokuToSolve[posX1][posY1],self.sudokuToSolve[posX2][posY2]):
                 #neighbors
+                for k in range(0, 9):
+                    if posX1 != k:
+                        if self.sudokuToSolve[k][posY1].value == 0:
+                            queue.append([k, posY1, posX1, posY1])
+                for h in range(0, 9):
+                    if posY1 != h:
+                        if self.sudokuToSolve[posX1][h].value == 0:
+                            queue.append([posX1, h, posX1, posY1])
+                for k in range(numberCaseLine, numberCaseLine + 3):
+                    for h in range(numberCaseColumn, numberCaseColumn + 3):
+                        if posX1 != k or posY1 != h:
+                            if self.sudokuToSolve[k][h].value == 0:
+                                queue.append([k, h, posX1, posY1])
